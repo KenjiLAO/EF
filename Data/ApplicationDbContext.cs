@@ -10,34 +10,56 @@ public class ApplicationDbContext : DbContext {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configurer la relation entre Product et Category (Un à Plusieurs)
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId);
 
-        // Configurer la relation entre Order et Customer (Plusieurs à Un)
         modelBuilder.Entity<Order>()
             .HasOne(o => o.Customer)
             .WithMany(c => c.Orders)
             .HasForeignKey(o => o.CustomerId);
 
-        // Configurer la relation entre OrderItem et Order (Plusieurs à Un)
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Order)
             .WithMany(o => o.OrderItems)
             .HasForeignKey(oi => oi.OrderId);
 
-        // Configurer la relation entre OrderItem et Product (Plusieurs à Un)
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Product)
             .WithMany(p => p.OrderItems)
             .HasForeignKey(oi => oi.ProductId);
 
-        // Ajouter d'autres configurations, comme les contraintes uniques ou les index, si nécessaire
         modelBuilder.Entity<Customer>()
             .HasIndex(c => c.Email)
             .IsUnique();
+
+        modelBuilder.Entity<ProductRating>()
+            .HasOne(pr => pr.Product)
+            .WithMany(p => p.ProductRatings)
+            .HasForeignKey(pr => pr.ProductId);
+
+        modelBuilder.Entity<Stock>()
+            .HasOne(s => s.Product)
+            .WithMany(p => p.Stocks)
+            .HasForeignKey(s => s.ProductId);
+
+        modelBuilder.Entity<PriceHistory>()
+            .HasOne(ph => ph.Product)
+            .WithMany(p => p.PriceHistories)
+            .HasForeignKey(ph => ph.ProductId);
+
+        modelBuilder.Entity<Category>()
+            .HasOne(c => c.ParentCategory)
+            .WithMany(c => c.SubCategories)
+            .HasForeignKey(c => c.ParentCategoryId);
+
+        
+        modelBuilder.Entity<Product>().OwnsOne(p => p.Price, p =>
+        {
+            p.Property(m => m.Amount).HasColumnName("PriceAmount").HasPrecision(10, 2);
+            p.Property(m => m.Currency).HasColumnName("PriceCurrency").HasMaxLength(3);
+        });
     }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
     }

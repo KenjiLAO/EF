@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MyWebApi2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250407131916_3ème_migr")]
+    partial class _3ème_migr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +23,40 @@ namespace MyWebApi2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("MyWebApi2.Models.Address", b =>
+                {
+                    b.Property<int>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("AddressId"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("AddressId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Address");
+                });
 
             modelBuilder.Entity("MyWebApi2.Models.Category", b =>
                 {
@@ -217,6 +254,17 @@ namespace MyWebApi2.Migrations
                     b.ToTable("Stock");
                 });
 
+            modelBuilder.Entity("MyWebApi2.Models.Address", b =>
+                {
+                    b.HasOne("MyWebApi2.Models.Customer", "Customer")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("MyWebApi2.Models.Category", b =>
                 {
                     b.HasOne("MyWebApi2.Models.Category", "ParentCategory")
@@ -224,46 +272,6 @@ namespace MyWebApi2.Migrations
                         .HasForeignKey("ParentCategoryId");
 
                     b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("MyWebApi2.Models.Customer", b =>
-                {
-                    b.OwnsMany("MyWebApi2.Models.Address", "Addresses", b1 =>
-                        {
-                            b1.Property<int>("CustomerId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.HasKey("CustomerId", "Id");
-
-                            b1.ToTable("Address");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CustomerId");
-                        });
-
-                    b.Navigation("Addresses");
                 });
 
             modelBuilder.Entity("MyWebApi2.Models.Order", b =>
@@ -384,6 +392,8 @@ namespace MyWebApi2.Migrations
 
             modelBuilder.Entity("MyWebApi2.Models.Customer", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("Orders");
                 });
 
