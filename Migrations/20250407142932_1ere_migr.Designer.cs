@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MyWebApi2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250407132851_4ème_migr")]
-    partial class _4ème_migr
+    [Migration("20250407142932_1ere_migr")]
+    partial class _1ere_migr
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

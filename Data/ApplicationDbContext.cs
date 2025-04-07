@@ -61,6 +61,7 @@ public class ApplicationDbContext : DbContext {
             p.Property(m => m.Currency).HasColumnName("PriceCurrency").HasMaxLength(3);
         });
     }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
     }
 }
