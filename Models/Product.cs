@@ -6,6 +6,7 @@ public class Product {
     public int CategoryId { get; set; }
     public Money Price { get; set; }
     public Category Category { get; set; }
+    public Stock Stock { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; }
 
     public ICollection<ProductRating> ProductRatings { get; set; } = new List<ProductRating>();

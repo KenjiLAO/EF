@@ -27,5 +27,12 @@ namespace MyWebApi2.Controllers
             var paged = await _productService.GetPagedProductsAsync(page, pageSize);
             return Ok(paged);
         }
+
+        [HttpPost("search")]
+        public async Task<IActionResult> Search([FromBody] ProductSearchCriteria criteria)
+        {
+            var result = await _productService.SearchProductsAsync(criteria);
+            return Ok(result);
+        }
     }
 }

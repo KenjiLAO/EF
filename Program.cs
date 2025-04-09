@@ -19,8 +19,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>{
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<IProductCatalogService, ProductService>();
+builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ProductSearchService, ProductSearchService>();
+builder.Services.AddScoped<IProductCatalogService, ProductCatalogService>();
+
 
 var app = builder.Build();
 

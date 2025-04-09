@@ -9,4 +9,5 @@ public class OrderItem
     public decimal Price { get; set; }
     public Order Order { get; set; }
     public Product Product { get; set; }
+    public decimal TotalAmount { get; internal set; }
 }
